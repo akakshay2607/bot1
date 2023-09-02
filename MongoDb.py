@@ -22,7 +22,7 @@ def get_products(url):
         for i in products[:]:
             try:
                 name = i.find('a','s1Q9rs').text
-                print(name)
+                # print(name)
                 l = link+i.find('a','s1Q9rs').get('href')
                 l1 = l[l.index('pid'):]
                 pid = l1[:l1.index("&")]
@@ -44,7 +44,7 @@ def get_products(url):
                 prod = col1.find_one(myquery)
                 if prod:
                     if prod['Price'] == price_:
-                        print('Passing')
+                        # print('Passing')
                         pass
                     else:
                         print('Updating')
