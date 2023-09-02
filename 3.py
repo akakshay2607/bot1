@@ -110,7 +110,8 @@ def reply_msgs(msg):
         myquery = { "Tele_msg_id": reply_msg_id }
         newvalues = { "$set": { "price_limit": int(price.strip()) } }
         x = col1.update_one(myquery, newvalues)
-    except:
+    except Exception as e:
+        print(e)
         pass
     
 @bot.message_handler(func=lambda msg: "spam" in msg.text.lower().split()[0])
@@ -133,7 +134,7 @@ def handle_msg(msg):
             print('Starting Now')
             send_new_products(msg)
             send_updated_products(msg)
-            # sleep(2)
+            sleep(2)
     
     if msg.text=='stopbot':
         BOT = False
