@@ -107,24 +107,24 @@ def get_products(url):
                 print(d)
                 pass
 
-# while True:
-db = client['Telegram']
-collection2 = db['Urls']
-urls = collection2.find()
-ur = []
-for i in urls:
-    ur.append(i['url'])
-
-a = len(ur)
-print(a)
-for i in range(a):
-    threads = []
+while True:
+    db = client['Telegram']
+    collection2 = db['Urls']
+    urls = collection2.find()
+    ur = []
+    for i in urls:
+        ur.append(i['url'])
+    
+    a = len(ur)
+    print(a)
     for i in range(a):
-        if i:
-            t = Thread(target=get_products,args=(ur[i],))
-            t.start()
-            threads.append(t)
-
-    for idx,k in enumerate(threads):
-        k.join()
-    sleep(1)
+        threads = []
+        for i in range(a):
+            if i:
+                t = Thread(target=get_products,args=(ur[i],))
+                t.start()
+                threads.append(t)
+    
+        for idx,k in enumerate(threads):
+            k.join()
+        sleep(1)
