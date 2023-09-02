@@ -88,7 +88,7 @@ def get_products(url):
                 prod = col1.find_one(myquery)
                 if prod:
                     if prod['Price'] == price_:
-                        print('Passing')
+                        # print('Passing')
                         pass
                     else:
                         print('Updating')
