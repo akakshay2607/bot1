@@ -105,10 +105,13 @@ def reply_msgs(msg):
     reply_msg_id = msg.reply_to_message.message_id
     print(reply_msg_id)
     price = msg.text
-    bot.reply_to(msg,f"You will get notified when the price falls below {price} for this product")
-    myquery = { "Tele_msg_id": reply_msg_id }
-    newvalues = { "$set": { "price_limit": int(price.strip()) } }
-    x = col1.update_one(myquery, newvalues)
+    try:
+        bot.reply_to(msg,f"You will get notified when the price falls below {price} for this product")
+        myquery = { "Tele_msg_id": reply_msg_id }
+        newvalues = { "$set": { "price_limit": int(price.strip()) } }
+        x = col1.update_one(myquery, newvalues)
+    except:
+        pass
     
 @bot.message_handler(func=lambda msg: "spam" in msg.text.lower().split()[0])
 def reply_msgs(msg):
