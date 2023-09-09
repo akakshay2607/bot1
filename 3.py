@@ -43,8 +43,8 @@ def send_new_products(msg):
                 if users:
                     usr = users.split(',')
                     if str(msg.chat.id) in usr:
-                        print(usr)
-                        print('Passing')
+                        # print(usr)
+                        # print('Passing')
                         pass
                     else:
                         ind_time = datetime.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S.%f').split()[1]         
