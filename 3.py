@@ -9,40 +9,72 @@ import json
 from telebot import types
 from pymongo import MongoClient
 import sqlite3
+import gspread
+
+API_key = '18i2CHgGRESZaTlWi50tnVFDZYn2dL0a2fcny8tWkh-I'
+gc = gspread.service_account(filename='google.json')
+worksheet = gc.open_by_key(API_key)
+current_sheet = worksheet.worksheet('Products')
 
 API_KEY = '6391769840:AAEwK_31DatzAfqkDXV1mRp9ZRupzprNGDM'
-
 bot = telebot.TeleBot(token=API_KEY,parse_mode=None)
 CONNECTION_STRING = "mongodb+srv://akshay05775:jp29JILkIdDCTpu2@cluster0.8aktc9o.mongodb.net/"
 client = MongoClient(CONNECTION_STRING)
 
 def send_new_products(msg):
-    db1  = client['Spam']
-    spam_coll = db1['spam']
-    words = spam_coll.find()
-    spam = []
-    for word in words:
-        spam.append(word['word'].strip())
-    db = client['Telegram']
-    col1 = db['Products'] 
-    myquery = { "New": True,"Send":False,'Active':True}
-    rows = col1.find(myquery)
-    for row in rows:
-        prod_name = row['product_name']
-        to_send = 1
-        for word_ in spam:
-            if word_.lower() in prod_name.lower():
-                # print(f"{prod_name.lower()} contains spam word")
-                to_send = 0
-        if to_send:
-            ind_time = datetime.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S.%f').split()[1]         
-            tele_msg = f"""Name: {row['product_name']} \n\nPrice: {row['Price']} \nM.R.P.:{row['MRP']}  \nDiscount: {row['Discount']} \nNew Product: {ind_time} \n\n{row['Link']} \n\nSeller:\n{row['Seller']}"""
-            # print(tele_msg)
-            msg_id = bot.send_message(msg.chat.id,tele_msg).id
-            myquery = {"Product_id":row['Product_id']}
-            newvalues = { "$set": { "Tele_msg_id": msg_id,"Send":True,"New":False} }
-            x = col1.update_one(myquery, newvalues)
-
+    try:
+        db1  = client['Spam']
+        spam_coll = db1['spam']
+        words = spam_coll.find()
+        spam = []
+        for word in words:
+            spam.append(word['word'].strip())
+        db = client['Telegram']
+        col1 = db['Products']
+        myquery = { "New": True,'Blocked':False}
+        rows = col1.find(myquery)
+        for row in rows:
+            prod_name,users = row['product_name'],row['users']
+            to_send = 1
+            for word_ in spam:
+                if word_.lower() in prod_name.lower():
+                    to_send = 0
+            if to_send:
+                if users:
+                    usr = users.split(',')
+                    if str(msg.chat.id) in usr:
+                        print(usr)
+                        print('Passing')
+                        pass
+                    else:
+                        ind_time = datetime.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S.%f').split()[1]         
+                        tele_msg = f"""Name: {row['product_name']} \n\nPrice: {row['Price']} \nM.R.P.:{row['MRP']}  \nDiscount: {row['Discount']} \nNew Product: {ind_time} \n\n{row['Link']} \n\nSeller:\n{row['Seller']}"""
+                        # print(tele_msg)
+                        msg_id =bot.send_message(msg.chat.id,tele_msg).id
+                        sleep(0.5)
+                        if users:
+                            new_user = users +","+ str(msg.chat.id)
+                        else:
+                            new_user = str(msg.chat.id)
+                        myquery = {"Product_id":row['Product_id']}
+                        newvalues = { "$set": { "Tele_msg_id": msg_id,'users':new_user} }
+                        x = col1.update_one(myquery, newvalues)
+                else:
+                    ind_time = datetime.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S.%f').split()[1]         
+                    tele_msg = f"""Name: {row['product_name']} \n\nPrice: {row['Price']} \nM.R.P.:{row['MRP']}  \nDiscount: {row['Discount']} \nNew Product: {ind_time} \n\n{row['Link']} \n\nSeller:\n{row['Seller']}"""
+                    # print(tele_msg)
+                    msg_id =bot.send_message(msg.chat.id,tele_msg).id
+                    sleep(0.5)
+                    if users:
+                        new_user = users +","+ str(msg.chat.id)
+                    else:
+                        new_user = str(msg.chat.id)
+                    myquery = {"Product_id":row['Product_id']}
+                    newvalues = { "$set": { "Tele_msg_id": msg_id,'users':new_user} }
+                    x = col1.update_one(myquery, newvalues)
+    except Exception as e:
+        print(e)
+        
 def reply_to_msg(msg,chat_id,msg_id):
     try:
         bot_token = 'bot6391769840:AAEwK_31DatzAfqkDXV1mRp9ZRupzprNGDM'
@@ -64,30 +96,55 @@ def send_updated_products(msg):
         spam.append(word['word'].strip())
     db = client['Telegram']
     col1 = db['Products']
-    myquery = { "Updated": True,"Send":False,'Active':True}
+    myquery = { "Updated": True,'Blocked':False}
     rows = col1.find(myquery)
     for row in rows:
-        prod_name = row['product_name']
+        prod_name,users = row['product_name'],row['users']
         to_send = 1
         for word_ in spam:
             if word_.lower() in prod_name.lower():
-                # print(f"{prod_name.lower()} contains spam word")
                 to_send = 0
         if to_send:
             if row['Price']<=row['price_limit']:
-                ind_time = datetime.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S.%f').split()[1]
-                rply_msg_id = row['Tele_msg_id']
-                chat_id = msg.chat.id
-                text = f"""Name: {row['product_name']}\n\Price: {row['Price']}\nM.R.P.: {row['MRP']} \nDiscount: {row['Discount']} \nNew Product: {ind_time} \n\n{row['Link']} \n\nSeller:\n{row['Seller']}"""
-                a = reply_to_msg(text,chat_id,rply_msg_id)
-                try:
-                    msg_id = a['result']['message_id']
-                    sql = f"UPDATE Products SET msg_id='{msg_id}',Updated=False,Send=True where id='{row[0]}'"
-                    myquery = {"Product_id":row['Product_id']}
-                    newvalues = { "$set": { "Tele_msg_id": msg_id,"Send":True,"Updated":False} }
-                    x = col1.update_one(myquery, newvalues)
-                except Exception as e:
-                    print(e)
+                if users:
+                    usr = users.split(',')
+                    if str(msg.chat.id) in usr:
+                        pass
+                    else:
+                        ind_time = datetime.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S.%f').split()[1]
+                        rply_msg_id = row['Tele_msg_id']
+                        chat_id = msg.chat.id
+                        text = f"""**Updated Product\n\nName: {row['product_name']}\nPrice: {row['Price']}\nM.R.P.: {row['MRP']} \nDiscount: {row['Discount']} \nNew Product: {ind_time} \n\n{row['Link']} \n\nSeller:\n{row['Seller']}"""
+                        a = reply_to_msg(text,chat_id,rply_msg_id)
+                        try:
+                            msg_id = a['result']['message_id']
+                            myquery = {"Product_id":row['Product_id']}
+                            if users:
+                                new_user = users +","+ str(msg.chat.id)
+                            else:
+                                new_user = str(msg.chat.id)
+                            newvalues = { "$set": { "Tele_msg_id": msg_id,'users':new_user} }
+                            x = col1.update_one(myquery, newvalues)
+                        except Exception as e:
+                            print(e)
+                else:
+                    ind_time = datetime.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S.%f').split()[1]
+                    rply_msg_id = row['Tele_msg_id']
+                    chat_id = msg.chat.id
+                    text = f"""**Updated Product\n\nName: {row['product_name']}\nPrice: {row['Price']}\nM.R.P.: {row['MRP']} \nDiscount: {row['Discount']} \nNew Product: {ind_time} \n\n{row['Link']} \n\nSeller:\n{row['Seller']}"""
+                    a = reply_to_msg(text,chat_id,rply_msg_id)
+                    try:
+                        msg_id = a['result']['message_id']
+                        myquery = {"Product_id":row['Product_id']}
+                        if users:
+                            new_user = users +","+ str(msg.chat.id)
+                        else:
+                            new_user = str(msg.chat.id)
+                        newvalues = { "$set": { "Tele_msg_id": msg_id,'users':new_user} }
+                        x = col1.update_one(myquery, newvalues)
+                    except Exception as e:
+                        print(e)
+                    
 
 @bot.message_handler(commands=["btn"])
 def send_buttons(msg):
@@ -103,40 +160,56 @@ def reply_msgs(msg):
     db = client['Telegram']
     col1 = db['Products']
     reply_msg_id = msg.reply_to_message.message_id
-    print(reply_msg_id)
     price = msg.text
-    try:
+    if price.isnumeric():
         bot.reply_to(msg,f"You will get notified when the price falls below {price} for this product")
         myquery = { "Tele_msg_id": reply_msg_id }
         newvalues = { "$set": { "price_limit": int(price.strip()) } }
         x = col1.update_one(myquery, newvalues)
-    except Exception as e:
-        print(e)
-        pass
-    
+        myquery = { "Tele_msg_id": reply_msg_id }
+        x = col1.find_one(myquery)
+        try:
+            pid = x['Product_id']
+            test = current_sheet.col_values(3)
+            rownum = test.index(f'{pid}') + 1
+            current_sheet.update_cell(rownum, 8, int(price.strip()))
+        except:
+            pass
+    else:
+        bot.reply_to(msg,'This product will be blocked')
+        myquery = { "Tele_msg_id": reply_msg_id }
+        newvalues = { "$set": { "Blocked": True} }
+        x = col1.update_one(myquery, newvalues)
+        myquery = { "Tele_msg_id": reply_msg_id }
+        x = col1.find_one(myquery)
+        pid = x['Product_id']
+        test = current_sheet.col_values(3)
+        rownum = test.index(f'{pid}') + 1
+        current_sheet.update_cell(rownum, 9, True)
+        
 @bot.message_handler(func=lambda msg: "spam" in msg.text.lower().split()[0])
 def reply_msgs(msg):
+    user_ = msg.chat.first_name
     print(f'Spam word {msg.text}')
     word = msg.text.split('-')[1]
     db = client['Spam']
     sapm_coll = db['spam']
-    mylist = {'word':word}
+    mylist = {'word':word,'by':user_}
     sapm_coll.insert_one(mylist)
     bot.reply_to(msg,f"spam word added successfully")
     
 @bot.message_handler(func=lambda m:True)
 def handle_msg(msg):
     BOT  = False
-    if msg.text=='startbot':
-        print(msg)
+    if msg.text.lower()=='aaaa':
         BOT = True
+        print('Starting Now')
         while BOT:
-            print('Starting Now')
             send_new_products(msg)
             send_updated_products(msg)
             sleep(2)
     
-    if msg.text=='stopbot':
+    if msg.text.lower()=='stopbot':
         BOT = False
         print('Stopping bot')
     
@@ -144,15 +217,12 @@ def handle_msg(msg):
         bot.send_message(msg.chat.id,'Enter the url')
     
     if 'http' in msg.text.split()[0]:
+        user_ = msg.chat.first_name
         url = msg.text
         db = client['Telegram']
         collection2 = db['Urls']
-        # urls = collection2.find()
-        mylist = {'url':url}
+        mylist = {'url':url,'by':user_}
         collection2.insert_one(mylist)
         bot.send_message(msg.chat.id,'Url Added Successfully')
-    
-    
-
 print('Starting')
 bot.polling()
