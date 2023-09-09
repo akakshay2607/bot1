@@ -12,7 +12,10 @@ API_key = '18i2CHgGRESZaTlWi50tnVFDZYn2dL0a2fcny8tWkh-I'
 gc = gspread.service_account(filename='google.json')
 worksheet = gc.open_by_key(API_key)
 current_sheet = worksheet.worksheet('Products')
-shoes = worksheet.add_worksheet('shoes',10000,20)
+try:
+    shoes = worksheet.add_worksheet('shoes',10000,20)
+except:
+    pass
 
 # MongoDB
 CONNECTION_STRING = "mongodb+srv://akshay05775:jp29JILkIdDCTpu2@cluster0.8aktc9o.mongodb.net/"
@@ -61,21 +64,21 @@ def get_products(url):
                 prod = col1.find_one(myquery)
                 if prod:
                     if prod['Price'] == price_:
-                        print('Passing')
+                        # print('Passing')
                         pass
                     else:
-                        print('Updating')
+                        # print('Updating')
                         myquery = { "Product_id": prod_id}
                         newvalues = { "$set": { "Updated": True,"Send":False,"New":False,"Price":price_,"MRP":MRP_,
                                                "Discount":Discount,"Link":l,'users':''} }
                         x = col1.update_one(myquery, newvalues)
 
                 else:
-                    print('Inserting new product')
+                    # print('Inserting new product')
                     
                     mylist = {"product_name":name,"Link":l,"Product_id":prod_id,"Seller":sellers_link,"Price":price_,"MRP":MRP_,
                               "Discount":Discount,"price_limit":0,"Updated":False,"New":True,"Send":False,'Active':True,"Tele_msg_id":0,'Blocked':False,'users':''}
-#                     print(mylist)
+                    # print(mylist)
                     df1 = pd.DataFrame([mylist])
                     df = pd.concat([df,df1],ignore_index=True)
                     col1.insert_one(mylist)
@@ -109,17 +112,17 @@ def get_products(url):
                 prod = col1.find_one(myquery)
                 if prod:
                     if prod['Price'] == price_:
-                        print('Passing')
+                        # print('Passing')
                         pass
                     else:
-                        print('Updating')
+                        # print('Updating')
                         myquery = { "Product_id": prod_id}
                         newvalues = { "$set": { "Updated": True,"Send":False,"New":False,"Price":price_,"MRP":MRP_,
                                                "Discount":Discount,"Link":l,'users':''} }
                         x = col1.update_one(myquery, newvalues)
 
                 else:
-                    print('Inserting new product')
+                    # print('Inserting new product')
                     mylist = {"product_name":name,"Link":l,"Product_id":prod_id,"Seller":sellers_link,"Price":price_,"MRP":MRP_,
                               "Discount":Discount,"price_limit":0,"Updated":False,"New":True,"Send":False,'Active':True,"Tele_msg_id":0,'Blocked':False,'users':''}
 #                     print(mylist)
