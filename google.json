@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "betting-bot-392314",
+  "private_key_id": "1b94034c32bad2cd76114d5810b8cc54f9baffb8",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDF+5SdcjCISiGV\nT8s44dHdGQmgksCpR+ZGfph5ZFPBU8IosAMZaWdld/pFRNCFOOIAFFVRMI7ZwOs2\ndHGRAazzSZl8vQdj7i+rXTyo08fY4JGFZsEspShBSH/8S4/PLcjgPnrQbQCkRPoD\nR5/a0dRKcTNbgDasyJDK58WP5y9AExwQFy+n815g6XtjjWMlPbfmbESZXwgRSQFv\njIYNPJTXOLOFS9XzLmlQPZxlKxBXmofGr57w1zdFryX72nSYTeXnPe8MlE6uOqC9\npjLY3PQrzuPFV8d/tdzupzEhk+xM2kjkeMHeIkf4L6WDOkE1+cY3Wm1AWJ1RYqV0\nfAN57sp7AgMBAAECggEABPeopUFTNGg1FYD4sVxWc/yygCPjz5uCjJbqjnPU93nO\n2k8oP2qknH15JbnHSEBtczZkuZ0anci4Xhe9LbfkC1VNE5Mj7Kmc6pNz99cbIYw+\nOnb3Nn6NAa5Rqmve7Nd86HDI4L02EekPziXtky5GlvjmIqVB5JiXrBpKm69flnTu\nUtHoO8v8Y82hRUDNfPqiODglGjJh5xMVgDxPk8yyjQoGCkNT7iDSUqPf5zaFy2pD\nX8QZMXx2+jTDocI4aznoPrMWOe8h5Z46rtVlspbVWHYVx3GNqGUnaE8AwPYcQknM\nm2DR8e1VaLtOjtzczBw45KOeNu7+zaDanbU/1ntSwQKBgQDiqrT7fkcHFMz122Ub\nctEPBBMhlQ9ulsUz4uZgaikZqY1LmTDmVMBWTz7awPU8A577PXu+XKwghtiNbt/5\nZltLtfsLgr8Gna9WF/JLn4RS+ZWXo9QTMSuq6vfQBI6U28LqO3RDwEPncYVVKWav\nvLdca/cj3yY5Oo4fxTsvIlE8IQKBgQDfmpelztJ0fs9kwI5mCbGLvemq02bilHby\ncv121gvm2beWyoYEng2vp/a7WTT/dnvrStrHeWRB3rC8y8t8/mqqtFlsR48Km4AW\nU7IOWvGTWJx75Wt0EXz+JplDH5W7bxw2XJzpN1uZpxecxDLMHqWjATpCmWs0nJDq\nleW4TwcTGwKBgQCo5Al2WuERpa4SgycTDLo5NhALNcYJ4M2Pm8GMlY2KUYu2iK6m\n8P9fUCzFUoFn9kq/aVCKxwJ6Of+hYrwAWQQtpaspKIKtq1C6FZ20O2eda9rK4odi\nxYCEGhAML1kOEbFqVmKLGPd/vFZc3jxlNXhqpQfA8sTIX5kGky9GL4vYAQKBgQCY\nZenzpUnFAmThu2eSXgr3PkHTHvBhf2Sui/b6lppYBY1eJbw/y2VykhzUxdEcSCnf\nTQ5do/vT9S4qDxAqqdATdoX4CbGRPjiHfxW9OPirP1qwCsY4vm6dXbtZh15q+CiX\nWHnNbeBtkffC7endOwoTVhPaLmxl2Evgxrdh7eLZfwKBgQCZbGrWvknHdlI4GcBr\nz5+79Yk+FUQwCJLnqVTBETagnVw2cDiteOv57s45a1jkm21oMXgPGrXK/t7BwSJW\nC4NyrCyMVkWjNFSY9q+a9GtzNtX3xCwi9JYBF17msZoYTLorTMdCG7xjrD5DNpiV\nYTo2S+ffuCqIzD2vudwZH+0pMQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "betting-bot@betting-bot-392314.iam.gserviceaccount.com",
+  "client_id": "100493270940909936288",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/betting-bot%40betting-bot-392314.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
