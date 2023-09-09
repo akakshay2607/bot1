@@ -151,14 +151,14 @@ while True:
     
     a = len(ur)
     print(a)
+    # for i in range(a):
+    threads = []
     for i in range(a):
-        threads = []
-        for i in range(a):
-            if i:
-                t = Thread(target=get_products,args=(ur[i],))
-                t.start()
-                threads.append(t)
-    
-        for idx,k in enumerate(threads):
-            k.join()
-        sleep(1)
+        if i:
+            t = Thread(target=get_products,args=(ur[i],))
+            t.start()
+            threads.append(t)
+
+    for idx,k in enumerate(threads):
+        k.join()
+    sleep(1)
