@@ -83,7 +83,7 @@ def get_products(url):
                     df = pd.concat([df,df1],ignore_index=True)
                     col1.insert_one(mylist)
             except Exception as e:
-                print(e)
+                # print(e)
                 pass
     else:
         df = pd.DataFrame()
@@ -130,7 +130,7 @@ def get_products(url):
                     df = pd.concat([df,df1],ignore_index=True)
                     col1.insert_one(mylist)
             except Exception as d:
-                print(d)
+                # print(d)
                 pass
             
     if df.empty:
