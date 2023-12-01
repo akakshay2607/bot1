@@ -87,6 +87,9 @@ def reply_to_msg(msg,chat_id,msg_id):
         print(e)
         pass
 
+def xyz():
+    pass
+
 def send_updated_products(msg):
     db1  = client['Spam']
     spam_coll = db1['spam']
